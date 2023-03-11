@@ -1,0 +1,13 @@
+__pycache__/
+*.py[cod]
+*$py.class
+
+**/dataset/
+**/.idea/
+**/logs/
+**/checkpoints/
+**/test_results/
+**/results/
+**/result.txt
+
+**/.DS_Store
