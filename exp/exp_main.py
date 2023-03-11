@@ -304,12 +304,12 @@ class Exp_Main(Exp_Basic):
 
         mae, mse, rmse, mape, mspe, rse, corr = metric(preds, trues)
         print('mse:{}, mae:{}, rse:{}'.format(mse, mae, rse))
-        f = open("result.txt", 'a')
-        f.write(setting + "  \n")
-        f.write('mse:{}, mae:{}, rse:{}'.format(mse, mae, rse))
-        f.write('\n')
-        f.write('\n')
-        f.close()
+        # f = open("result.txt", 'a')
+        # f.write(setting + "  \n")
+        # f.write('mse:{}, mae:{}, rse:{}'.format(mse, mae, rse))
+        # f.write('\n')
+        # f.write('\n')
+        # f.close()
 
         # 反归一化
         preds_unnorm = test_data.scaler.inverse_transform(preds.reshape((-1, 31)))
