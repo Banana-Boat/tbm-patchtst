@@ -5,6 +5,7 @@ from exp.exp_main import Exp_Main
 import random
 import numpy as np
 
+
 def main():
   parser = argparse.ArgumentParser(description='Autoformer & Transformer family for Time Series Forecasting')
 
@@ -33,9 +34,8 @@ def main():
   parser.add_argument('--label_len', type=int, default=48, help='start token length')
   parser.add_argument('--pred_len', type=int, default=96, help='prediction sequence length')
 
-
   # DLinear
-  #parser.add_argument('--individual', action='store_true', default=False, help='DLinear: a linear layer for each variate(channel) individually')
+  # parser.add_argument('--individual', action='store_true', default=False, help='DLinear: a linear layer for each variate(channel) individually')
 
   # PatchTST
   parser.add_argument('--fc_dropout', type=float, default=0.05, help='fully connected dropout')
@@ -51,8 +51,10 @@ def main():
   parser.add_argument('--individual', type=int, default=0, help='individual head; True 1 False 0')
 
   # Formers 
-  parser.add_argument('--embed_type', type=int, default=0, help='0: default 1: value embedding + temporal embedding + positional embedding 2: value embedding + temporal embedding 3: value embedding + positional embedding 4: value embedding')
-  parser.add_argument('--enc_in', type=int, default=7, help='encoder input size') # DLinear with --individual, use this hyperparameter as the number of channels
+  parser.add_argument('--embed_type', type=int, default=0,
+                      help='0: default 1: value embedding + temporal embedding + positional embedding 2: value embedding + temporal embedding 3: value embedding + positional embedding 4: value embedding')
+  parser.add_argument('--enc_in', type=int, default=7,
+                      help='encoder input size')  # DLinear with --individual, use this hyperparameter as the number of channels
   parser.add_argument('--dec_in', type=int, default=7, help='decoder input size')
   parser.add_argument('--c_out', type=int, default=7, help='output size')
   parser.add_argument('--d_model', type=int, default=512, help='dimension of model')
@@ -104,10 +106,10 @@ def main():
   args.use_gpu = True if (torch.cuda.is_available() or torch.backends.mps.is_available()) and args.use_gpu else False
 
   if args.use_gpu and args.use_multi_gpu:
-      args.dvices = args.devices.replace(' ', '')
-      device_ids = args.devices.split(',')
-      args.device_ids = [int(id_) for id_ in device_ids]
-      args.gpu = args.device_ids[0]
+    args.dvices = args.devices.replace(' ', '')
+    device_ids = args.devices.split(',')
+    args.device_ids = [int(id_) for id_ in device_ids]
+    args.gpu = args.device_ids[0]
 
   print('Args in experiment:')
   print(args)
@@ -115,61 +117,62 @@ def main():
   Exp = Exp_Main
 
   if args.is_training:
-      for ii in range(args.itr):
-          # setting record of experiments
-          setting = '{}_{}_{}_ft{}_sl{}_ll{}_pl{}_dm{}_nh{}_el{}_dl{}_df{}_fc{}_eb{}_dt{}_{}_{}'.format(
-              args.model_id,
-              args.model,
-              args.data,
-              args.features,
-              args.seq_len,
-              args.label_len,
-              args.pred_len,
-              args.d_model,
-              args.n_heads,
-              args.e_layers,
-              args.d_layers,
-              args.d_ff,
-              args.factor,
-              args.embed,
-              args.distil,
-              args.des,ii)
-
-          exp = Exp(args)  # set experiments
-          print('>>>>>>>start training : {}>>>>>>>>>>>>>>>>>>>>>>>>>>'.format(setting))
-          exp.train(setting)
-
-          print('>>>>>>>testing : {}<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<'.format(setting))
-          exp.test(setting, test=1)
-
-          if args.do_predict:
-              print('>>>>>>>predicting : {}<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<'.format(setting))
-              exp.predict(setting, True)
-
-          torch.cuda.empty_cache()
-  else:
-      ii = 0
-      setting = '{}_{}_{}_ft{}_sl{}_ll{}_pl{}_dm{}_nh{}_el{}_dl{}_df{}_fc{}_eb{}_dt{}_{}_{}'.format(args.model_id,
-                                                                                                    args.model,
-                                                                                                    args.data,
-                                                                                                    args.features,
-                                                                                                    args.seq_len,
-                                                                                                    args.label_len,
-                                                                                                    args.pred_len,
-                                                                                                    args.d_model,
-                                                                                                    args.n_heads,
-                                                                                                    args.e_layers,
-                                                                                                    args.d_layers,
-                                                                                                    args.d_ff,
-                                                                                                    args.factor,
-                                                                                                    args.embed,
-                                                                                                    args.distil,
-                                                                                                    args.des, ii)
+    for ii in range(args.itr):
+      # setting record of experiments
+      setting = '{}_{}_{}_ft{}_sl{}_ll{}_pl{}_dm{}_nh{}_el{}_dl{}_df{}_fc{}_eb{}_dt{}_{}_{}'.format(
+        args.model_id,
+        args.model,
+        args.data,
+        args.features,
+        args.seq_len,
+        args.label_len,
+        args.pred_len,
+        args.d_model,
+        args.n_heads,
+        args.e_layers,
+        args.d_layers,
+        args.d_ff,
+        args.factor,
+        args.embed,
+        args.distil,
+        args.des, ii)
 
       exp = Exp(args)  # set experiments
+      print('>>>>>>>start training : {}>>>>>>>>>>>>>>>>>>>>>>>>>>'.format(setting))
+      exp.train(setting)
+
       print('>>>>>>>testing : {}<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<'.format(setting))
       exp.test(setting, test=1)
+
+      if args.do_predict:
+        print('>>>>>>>predicting : {}<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<'.format(setting))
+        exp.predict(setting, True)
+
       torch.cuda.empty_cache()
+  else:
+    ii = 0
+    setting = '{}_{}_{}_ft{}_sl{}_ll{}_pl{}_dm{}_nh{}_el{}_dl{}_df{}_fc{}_eb{}_dt{}_{}_{}'.format(args.model_id,
+                                                                                                  args.model,
+                                                                                                  args.data,
+                                                                                                  args.features,
+                                                                                                  args.seq_len,
+                                                                                                  args.label_len,
+                                                                                                  args.pred_len,
+                                                                                                  args.d_model,
+                                                                                                  args.n_heads,
+                                                                                                  args.e_layers,
+                                                                                                  args.d_layers,
+                                                                                                  args.d_ff,
+                                                                                                  args.factor,
+                                                                                                  args.embed,
+                                                                                                  args.distil,
+                                                                                                  args.des, ii)
+
+    exp = Exp(args)  # set experiments
+    print('>>>>>>>testing : {}<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<'.format(setting))
+    exp.test(setting, test=1)
+    torch.cuda.empty_cache()
+
 
 if __name__ == '__main__':
   main()

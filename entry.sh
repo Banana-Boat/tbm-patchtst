@@ -28,7 +28,7 @@ timestamp=`date "+%m-%d_%H:%M:%S"`
 #       --factor 3 \
 #       --des 'Exp' \
 #       --itr 1 \
-#       | tee logs/PatchTST_${timestamp}.log
+#       | tee logs/Transformer_${timestamp}.log
 
 
 # PatchTST模型 盾构机数据
