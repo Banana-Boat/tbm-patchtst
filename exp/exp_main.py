@@ -104,7 +104,7 @@ class Exp_Main(Exp_Basic):
         vali_data, vali_loader = self._get_data(flag='val')
         test_data, test_loader = self._get_data(flag='test')
 
-        path = os.path.join(self.args.checkpoints, datetime.datetime.now().strftime('%m-%d_%H:%M:%S'), setting)
+        path = os.path.join(self.args.checkpoints, datetime.datetime.now().strftime('%m-%d_%H-%M-%S'), setting)
         if not os.path.exists(path):
             os.makedirs(path)
 
@@ -233,7 +233,7 @@ class Exp_Main(Exp_Basic):
         preds = []
         trues = []
         inputx = []
-        folder_path = './test_results/' + datetime.datetime.now().strftime('%m-%d_%H:%M:%S') + setting + '/'
+        folder_path = './test_results/' + datetime.datetime.now().strftime('%m-%d_%H-%M-%S') + setting + '/'
         if not os.path.exists(folder_path):
             os.makedirs(folder_path)
 
@@ -299,7 +299,7 @@ class Exp_Main(Exp_Basic):
         inputx = inputx.reshape(-1, inputx.shape[-2], inputx.shape[-1])
 
         # result save
-        folder_path = './results/' + datetime.datetime.now().strftime('%m-%d_%H:%M:%S') + setting + '/'
+        folder_path = './results/' + datetime.datetime.now().strftime('%m-%d_%H-%M-%S') + setting + '/'
         if not os.path.exists(folder_path):
             os.makedirs(folder_path)
 

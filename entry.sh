@@ -2,7 +2,7 @@ if [ ! -d "./logs" ]; then
     mkdir ./logs
 fi
 
-timestamp=`date "+%m-%d_%H:%M:%S"`
+timestamp=`date "+%m-%d_%H-%M-%S"`
 
 # Transformer模型 盾构机数据
 #python -u run_longExp.py \
