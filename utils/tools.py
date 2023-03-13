@@ -118,7 +118,7 @@ def test_params_flop(model, x_shape):
 
 
 def visualization(folder_path, trues, preds, labels):
-  plt.rcParams['font.sans-serif'] = ['Arial Unicode MS']
+  plt.rcParams['font.sans-serif'] = ['Arial Unicode MS', 'SimHei']
 
   fig, axes = plt.subplots(len(labels), 1)
   fig.set_figwidth(25)

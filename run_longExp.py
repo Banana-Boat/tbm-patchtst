@@ -1,9 +1,12 @@
 import argparse
 import os
 import torch
+
+from Formers.FEDformer.layers.utils import test
 from exp.exp_main import Exp_Main
 import random
 import numpy as np
+import datetime
 
 
 def main():
@@ -119,8 +122,8 @@ def main():
   if args.is_training:
     for ii in range(args.itr):
       # setting record of experiments
-      setting = '{}_{}_{}_ft{}_sl{}_ll{}_pl{}_dm{}_nh{}_el{}_dl{}_df{}_fc{}_eb{}_dt{}_{}_{}'.format(
-        args.model_id,
+      setting = '{}_{}_{}_ft{}_sl{}_ll{}_pl{}_dm{}_nh{}_el{}_dl{}_df{}_fc{}'.format(
+        datetime.datetime.now().strftime("%m-%d_%H-%M-%S"),
         args.model,
         args.data,
         args.features,
@@ -132,16 +135,14 @@ def main():
         args.e_layers,
         args.d_layers,
         args.d_ff,
-        args.factor,
-        args.embed,
-        args.distil,
-        args.des, ii)
+        args.factor)
 
       exp = Exp(args)  # set experiments
       print('>>>>>>>start training : {}>>>>>>>>>>>>>>>>>>>>>>>>>>'.format(setting))
       exp.train(setting)
 
       print('>>>>>>>testing : {}<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<'.format(setting))
+      # exp.test(setting, test=1)
       exp.test(setting)
 
       if args.do_predict:

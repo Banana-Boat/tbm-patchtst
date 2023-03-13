@@ -228,13 +228,15 @@ class Exp_Main(Exp_Basic):
 
     if test:
       print('loading model')
-      # self.model.load_state_dict(torch.load(os.path.join('./checkpoints', 'checkpoint.pth')))
-      self.model.load_state_dict(torch.load(os.path.join('./checkpoints/' + setting, 'checkpoint.pth')))
+      self.model.load_state_dict(torch.load(os.path.join('./checkpoints', 'checkpoint.pth')))
+      # self.model.load_state_dict(torch.load(os.path.join('./checkpoints/' + setting, 'checkpoint.pth')))
 
-    preds = []
-    trues = []
-    inputx = []
+    # 用于评价指标的计算(metric)
+    # preds = []
+    # trues = []
+    # inputx = []
 
+    # 用于可视化反归一后的结果对比
     _preds = []
     _trues = []
 
@@ -275,50 +277,51 @@ class Exp_Main(Exp_Basic):
         outputs = outputs.detach().cpu().numpy()
         batch_y = batch_y.detach().cpu().numpy()
 
+        # pred = outputs  # outputs.detach().cpu().numpy()  # .squeeze()
+        # true = batch_y  # batch_y.detach().cpu().numpy()  # .squeeze()
+        #
+        # preds.append(pred)
+        # trues.append(true)
+        # inputx.append(batch_x.detach().cpu().numpy())
+
         _pred = []
-        for batch in outputs:
-          _pred.append(batch[0, :])
-        _preds += _pred
-
         _true = []
-        for batch in batch_y:
-          _true.append(batch[0, :])
+
+        for index, batch in enumerate(outputs):
+            _pred.append(batch[0, :])
+
+        for index, batch in enumerate(batch_y):
+            _true.append(batch[0, :])
+
+        _preds += _pred
         _trues += _true
-
-
-        pred = outputs  # outputs.detach().cpu().numpy()  # .squeeze()
-        true = batch_y  # batch_y.detach().cpu().numpy()  # .squeeze()
-
-        preds.append(pred)
-        trues.append(true)
-        inputx.append(batch_x.detach().cpu().numpy())
 
     # 反归一化
     preds_unnorm = test_data.inverse_transform((np.array(_preds)))
     trues_unnorm = test_data.inverse_transform((np.array(_trues)))
 
+    mae, mse, rmse, mape, mspe, rse, corr, r2 = metric(preds_unnorm, trues_unnorm)
+    print('mse:{}, mae:{}, rse:{}, r2:{}'.format(mse, mae, rse, r2))
+
     # 保存结果图
     folder_path = './results/' + setting + '/'
     if not os.path.exists(folder_path):
-        os.makedirs(folder_path)
+      os.makedirs(folder_path)
 
     visualization(folder_path, trues_unnorm, preds_unnorm, test_data.get_labels())
 
     if self.args.test_flop:
-        test_params_flop((batch_x.shape[1],batch_x.shape[2]))
-        exit()
+      test_params_flop((batch_x.shape[1], batch_x.shape[2]))
+      exit()
 
-    preds = np.array(preds)
-    trues = np.array(trues)
-
-    inputx = np.array(inputx)
-
-    preds = preds.reshape(-1, preds.shape[-2], preds.shape[-1])
-    trues = trues.reshape(-1, trues.shape[-2], trues.shape[-1])
-    inputx = inputx.reshape(-1, inputx.shape[-2], inputx.shape[-1])
-
-    mae, mse, rmse, mape, mspe, rse, corr, r2 = metric(preds, trues)
-    print('mse:{}, mae:{}, rse:{}, r2:{}'.format(mse, mae, rse, r2))
+    # preds = np.array(preds)
+    # trues = np.array(trues)
+    #
+    # inputx = np.array(inputx)
+    #
+    # preds = preds.reshape(-1, preds.shape[-2], preds.shape[-1])
+    # trues = trues.reshape(-1, trues.shape[-2], trues.shape[-1])
+    # inputx = inputx.reshape(-1, inputx.shape[-2], inputx.shape[-1])
 
     # np.save(folder_path + 'metrics.npy', np.array([mae, mse, rmse, mape, mspe,rse, corr]))
     # np.save(folder_path + 'pred.npy', preds)
