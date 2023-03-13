@@ -125,6 +125,9 @@ def visualization(folder_path, trues, preds, labels):
   fig.set_figheight(5 * len(labels))
   plt.subplots_adjust(bottom=0.05)
 
+  if len(labels) == 1:
+    axes = [axes]
+
   for (index, label), ax in zip(enumerate(labels), axes):
     ax.set_title(label)
 

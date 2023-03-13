@@ -228,8 +228,8 @@ class Exp_Main(Exp_Basic):
 
     if test:
       print('loading model')
-      self.model.load_state_dict(torch.load(os.path.join('./checkpoints', 'checkpoint.pth')))
-      # self.model.load_state_dict(torch.load(os.path.join('./checkpoints/' + setting, 'checkpoint.pth')))
+      # self.model.load_state_dict(torch.load(os.path.join('./checkpoints/03-13_17-39-52_PatchTST_custom_ftS_sl30_ll15_pl30_dm512_nh8_el2_dl1_df2048_fc3', 'checkpoint.pth')))
+      self.model.load_state_dict(torch.load(os.path.join('./checkpoints/' + setting, 'checkpoint.pth')))
 
     # 用于评价指标的计算(metric)
     # preds = []
