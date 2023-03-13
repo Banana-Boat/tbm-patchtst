@@ -226,6 +226,9 @@ class Dataset_Custom(Dataset):
         '''
         df_raw.columns: ['date', ...(other features), target feature]
         '''
+        self.labels = list(df_raw.columns)
+        self.labels.remove('date')
+
         cols = list(df_raw.columns)
         cols.remove(self.target)
         cols.remove('date')
@@ -247,10 +250,10 @@ class Dataset_Custom(Dataset):
 
         if self.scale:
             train_data = df_data[border1s[0]:border2s[0]]
-            self.scaler.fit(train_data.values)
+            self.scaler.fit(train_data.values) # 先对训练集计算均值和方差（注意是训练集而不是整个数据集）
             # print(self.scaler.mean_)
             # exit()
-            data = self.scaler.transform(df_data.values)
+            data = self.scaler.transform(df_data.values) # 再对整个数据集做归一化处理
         else:
             data = df_data.values
 
@@ -288,6 +291,9 @@ class Dataset_Custom(Dataset):
 
     def inverse_transform(self, data):
         return self.scaler.inverse_transform(data)
+
+    def get_labels(self):
+        return self.labels
     
 
 class Dataset_Pred(Dataset):
