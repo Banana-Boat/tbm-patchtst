@@ -8,7 +8,7 @@ timestamp=`date "+%m-%d_%H-%M-%S"`
 # PatchTST模型 全部数据
 python -u run_longExp.py \
       --data_path 20102631new.csv \
-      --train_epochs 12 \
+      --train_epochs 14 \
       --model PatchTST \
       --data custom \
       --target 俯仰角\
